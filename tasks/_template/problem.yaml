@@ -1,0 +1,87 @@
+# =============================================================================
+# Task Definition Template
+# =============================================================================
+#
+# HOW TO CREATE A NEW TASK:
+# 1. Run: python compile_tasks.py new my_task_name
+#    This copies the template to a new folder.
+# 2. Fill in all fields marked with TODO below
+# 3. Add step files in steps/ directory (see 01_step_name.py for format)
+# 4. (Optional) Add background files in background/ directory if needed
+# 5. Run: python compile_tasks.py validate tasks/your_task_folder/
+# 6. Run: python compile_tasks.py compile tasks/your_task_folder/
+#
+# NAMING CONVENTION:
+# Use descriptive names instead of numbers to avoid merge conflicts!
+# Examples:
+#   - lennard_jones_potential
+#   - protein_folding_energy
+#   - molecular_dynamics_sim
+#   - fourier_transform_solver
+#
+# =============================================================================
+
+# TODO: Unique identifier - use descriptive names, not numbers!
+# This becomes the problem_id in the evaluation system
+problem_id: "YOUR_TASK_NAME"
+
+# TODO: Human-readable name (spaces allowed)
+problem_name: "Your Problem Title"
+
+# TODO: Domain/category for organization
+domain: "your_domain"
+
+# TODO: Main problem description
+# Describe the overall goal - what problem are we solving?
+description: |
+  [Describe the problem here]
+  
+  [What real-world application does this address?]
+  
+  [What will the complete solution accomplish?]
+
+# TODO: Input/Output specification
+# This becomes the docstring shown in prompts
+io_spec: |
+  """
+  [Main Problem Title]
+  
+  [Overall description of what the complete solution does]
+  
+  Parameters:
+  -----------
+  [List main parameters that appear across sub-steps]
+  
+  Returns:
+  --------
+  [What the final integrated solution returns]
+  
+  Units:
+  ------
+  [Specify units used throughout - be consistent!]
+  """
+
+# TODO: Python dependencies
+# These are added as imports at the top of generated code
+dependencies:
+  - import numpy as np
+  # Add more as needed:
+  # - import scipy as sp
+  # - from scipy.constants import Avogadro
+  # - import math
+
+# TODO: List of step files (in order)
+# Reference files in steps/ directory WITHOUT the .py extension
+# Steps are solved sequentially - each can use functions from previous steps
+steps:
+  - 01_step_name
+  # - 02_step_name
+  # - 03_step_name
+  # Add more steps as needed
+
+# OPTIONAL: Background context for the main problem
+# Leave empty if not needed
+background_main: |
+  [Optional: Add general context here]
+  [This appears when with_background=True in evaluation]
+
