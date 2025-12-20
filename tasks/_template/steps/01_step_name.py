@@ -1,112 +1,115 @@
 """
-TODO: Step Title
+WRITE YOUR STEP DESCRIPTION HERE (this entire docstring is shown to the LLM)
 
-TODO: Describe what this step implements. This text becomes the 
-step_description_prompt shown to the LLM.
+This is the "step_description_prompt" - the instructions the model receives.
+Write it as if you're explaining the task to a skilled programmer who needs
+to implement this function from scratch.
 
-Be specific about:
-- What function to implement
-- What it should do
-- Any constraints or edge cases
+Include:
+- Clear description of what the function should do
+- Any mathematical formulas or algorithms to use
+- Edge cases to handle
+- Constraints (e.g., "must handle negative values")
+
+Example of a good description:
+    "Implement a function to calculate the Euclidean distance between two points
+    in N-dimensional space. The function should handle arrays of any dimension
+    and return a scalar distance value."
+
+DELETE THIS COMMENT BLOCK when writing your actual description.
 """
 
 import numpy as np
-# TODO: Add other imports your gold solution needs
+# Add any imports your gold solution needs
 
 
 # =============================================================================
-# FUNCTION SIGNATURE
+# FUNCTION SIGNATURE (shown to the LLM)
 # =============================================================================
-# This is what the LLM sees and must implement.
-# 
-# IMPORTANT:
-# - The function body is stripped out during compilation
-# - Only the signature and docstring are shown to the model
-# - The return statement becomes the "return_line" hint
+# The LLM sees:
+#   1. This function's name and parameters
+#   2. The docstring (so write a clear one!)
+#   3. A "return hint" extracted from the return statement below
+#
+# The "return hint" tells the model what to return. For example:
+#   return result           →  hint: "return result"
+#   return x, y, z          →  hint: "return x, y, z"  
+#   return {"a": a, "b": b} →  hint: "return {"a": a, "b": b}"
+#
+# This helps the model know the expected output structure.
 
 def function_name(param1, param2):
-    '''TODO: Write a clear docstring.
+    '''Docstring shown to the LLM - make it clear and helpful.
     
-    Parameters:
-    -----------
+    Parameters
+    ----------
     param1 : type
         Description of param1.
     param2 : type
         Description of param2.
     
-    Returns:
-    --------
+    Returns
+    -------
     result : type
         Description of what is returned.
-    
-    Notes:
-    ------
-    [Optional: Add any helpful notes about the implementation]
-    
-    Examples:
-    ---------
-    [Optional: Add usage examples]
-    >>> function_name(1, 2)
-    3
     '''
-    return result
+    return result  # ← This line becomes the "return hint" shown to the model
 
 
 # =============================================================================
-# GOLD SOLUTION
+# GOLD SOLUTION (your reference implementation - NOT shown to LLM)
 # =============================================================================
-# The reference implementation that:
-# 1. Generates test targets automatically
-# 2. Validates test cases work correctly  
-# 3. Provides ground truth for evaluation
+# This is YOUR correct implementation. It is used to:
+# 1. Automatically generate expected test outputs
+# 2. Verify the task is solvable
+# 3. Provide ground truth for scoring
 #
-# NAMING: Must be _gold_{function_name}
+# NAMING RULE: Must be named _gold_{function_name}
+# Example: if your function is "calculate_distance", gold is "_gold_calculate_distance"
 
 def _gold_function_name(param1, param2):
-    '''Reference implementation.'''
-    # TODO: Implement the correct solution
-    result = None  # Replace with actual implementation
+    '''Your correct implementation goes here.'''
+    # IMPLEMENT YOUR SOLUTION HERE
+    # This code generates the expected outputs for test cases
+    result = None  # Replace with your actual implementation
     return result
 
 
 # =============================================================================
 # TEST CASES
 # =============================================================================
-# Each test case specifies:
-#   - setup: Code to create test inputs
-#   - call: How to call the function being tested  
-#   - gold_call: How to call the gold solution
+# Define test inputs. The compiler will:
+# 1. Run "setup" to create variables
+# 2. Run "gold_call" to get the expected output
+# 3. Store expected output for evaluation
 #
-# The compiler will:
-# 1. Run setup code
-# 2. Execute gold_call to get expected output
-# 3. Store output in H5 file as "target"
-# 4. Generate test: setup + "assert comparison(call, target)"
+# During evaluation, the LLM's code is tested with:
+#   setup code + assert(model_output == expected_output)
 
 def test_cases():
     """Return list of test case specifications."""
     return [
         {
+            # Code that sets up test variables
             "setup": """
-# TODO: Set up test inputs
-param1 = None
-param2 = None
+param1 = ...  # Your test input
+param2 = ...  # Your test input
 """,
+            # How to call the function being tested
             "call": "function_name(param1, param2)",
+            # How to call your gold solution (same args)
             "gold_call": "_gold_function_name(param1, param2)",
         },
         {
             "setup": """
-# TODO: Set up different test inputs
-param1 = None
-param2 = None
+param1 = ...  # Different test input
+param2 = ...  # Different test input
 """,
             "call": "function_name(param1, param2)",
             "gold_call": "_gold_function_name(param1, param2)",
         },
-        # Add more test cases as needed
-        # Aim for 3+ test cases covering:
+        # Add 3+ test cases covering:
         # - Normal/typical inputs
-        # - Edge cases  
+        # - Edge cases (empty arrays, zero values, etc.)
         # - Boundary conditions
     ]

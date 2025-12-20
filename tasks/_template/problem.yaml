@@ -1,87 +1,112 @@
 # =============================================================================
-# Task Definition Template
+# Task Definition
 # =============================================================================
 #
-# HOW TO CREATE A NEW TASK:
-# 1. Run: python compile_tasks.py new my_task_name
-#    This copies the template to a new folder.
-# 2. Fill in all fields marked with TODO below
-# 3. Add step files in steps/ directory (see 01_step_name.py for format)
-# 4. (Optional) Add background files in background/ directory if needed
-# 5. Run: python compile_tasks.py validate tasks/your_task_folder/
-# 6. Run: python compile_tasks.py compile tasks/your_task_folder/
+# This file defines your task's metadata and structure.
 #
-# NAMING CONVENTION:
-# Use descriptive names instead of numbers to avoid merge conflicts!
-# Examples:
-#   - lennard_jones_potential
-#   - protein_folding_energy
-#   - molecular_dynamics_sim
-#   - fourier_transform_solver
+# WORKFLOW:
+# 1. Run: task new my_task_name
+# 2. Edit this file - fill in all sections below
+# 3. Edit steps/*.py - implement each sub-problem
+# 4. (Optional) Edit background/*.md - add domain context
+# 5. Run: task validate tasks/my_task_name/
+# 6. Run: task compile tasks/my_task_name/
 #
 # =============================================================================
 
-# TODO: Unique identifier - use descriptive names, not numbers!
-# This becomes the problem_id in the evaluation system
-problem_id: "YOUR_TASK_NAME"
 
-# TODO: Human-readable name (spaces allowed)
-problem_name: "Your Problem Title"
+# TASK IDENTIFIER
+# ---------------
+# A unique name for your task. Use descriptive snake_case names.
+# Examples: lennard_jones_potential, protein_folding, fft_implementation
+problem_id: "your_task_name"
 
-# TODO: Domain/category for organization
+# DISPLAY NAME
+# ------------
+# Human-readable title shown in listings and reports.
+problem_name: "Your Task Title"
+
+# DOMAIN
+# ------
+# Category for organization (physics, chemistry, biology, math, etc.)
 domain: "your_domain"
 
-# TODO: Main problem description
-# Describe the overall goal - what problem are we solving?
-description: |
-  [Describe the problem here]
-  
-  [What real-world application does this address?]
-  
-  [What will the complete solution accomplish?]
 
-# TODO: Input/Output specification
-# This becomes the docstring shown in prompts
+# =============================================================================
+# PROBLEM DESCRIPTION (shown to LLM as context)
+# =============================================================================
+# Describe the overall problem. This appears at the start of prompts.
+
+description: |
+  Describe the problem you're asking the model to solve.
+  
+  What is the goal? What does a complete solution accomplish?
+  
+  Include any important context about the domain or application.
+
+
+# =============================================================================
+# I/O SPECIFICATION (shown to LLM)
+# =============================================================================
+# Document the overall input/output contract. This helps the model understand
+# what data types and formats to expect.
+
 io_spec: |
   """
-  [Main Problem Title]
+  Task Title
   
-  [Overall description of what the complete solution does]
+  Brief description of inputs and outputs across all steps.
   
-  Parameters:
-  -----------
-  [List main parameters that appear across sub-steps]
+  Parameters
+  ----------
+  param1 : type
+      Description
+  param2 : type
+      Description
   
-  Returns:
-  --------
-  [What the final integrated solution returns]
+  Returns
+  -------
+  result : type
+      What the final solution returns
   
-  Units:
-  ------
-  [Specify units used throughout - be consistent!]
+  Units
+  -----
+  Specify units if applicable (SI, etc.)
   """
 
-# TODO: Python dependencies
-# These are added as imports at the top of generated code
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+# Python imports available to the model. These are prepended to generated code.
+
 dependencies:
   - import numpy as np
   # Add more as needed:
   # - import scipy as sp
-  # - from scipy.constants import Avogadro
+  # - from scipy import linalg
   # - import math
 
-# TODO: List of step files (in order)
-# Reference files in steps/ directory WITHOUT the .py extension
-# Steps are solved sequentially - each can use functions from previous steps
+
+# =============================================================================
+# STEPS
+# =============================================================================
+# List of step files in order (without .py extension).
+# Each step should have a corresponding file: steps/01_step_name.py
+# Steps are solved sequentially - later steps can use earlier functions.
+
 steps:
   - 01_step_name
-  # - 02_step_name
-  # - 03_step_name
-  # Add more steps as needed
+  # - 02_another_step
+  # - 03_final_step
 
-# OPTIONAL: Background context for the main problem
-# Leave empty if not needed
+
+# =============================================================================
+# BACKGROUND (OPTIONAL)
+# =============================================================================
+# Overall background shown when with_background=True.
+# Leave empty or delete if not needed.
+
 background_main: |
-  [Optional: Add general context here]
-  [This appears when with_background=True in evaluation]
-
+  Optional: General background context for the entire problem.
+  Delete this section if not needed.

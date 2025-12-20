@@ -1,38 +1,51 @@
-# Background: [Step Title]
+# Background: [Your Step Title]
 
-<!--
-OPTIONAL: Background information for this step.
-Delete this file if no background is needed.
+> **This file is OPTIONAL.** Delete/skip it if the subproblem step doesn't need background context.
+> 
+> When provided, this content is shown to the LLM when running evaluation with
+> `with_background=True`. Use it to provide domain knowledge that helps the model
+> understand the problem better.
 
-This content is shown to the model when with_background=True.
-Use this to provide:
-- Mathematical formulas
-- Conceptual explanations
-- Algorithm descriptions
--->
+## What to Include
 
-## Overview
+This is where you provide **domain expertise** that might help solve the problem:
 
-[Explain the concept behind this step]
+- **Mathematical formulas** the solution should implement
+- **Algorithm descriptions** or pseudocode
+- **Domain-specific terminology** and definitions
+- **Physical intuition** or conceptual explanations
+- **References** to papers or resources
 
-## Mathematical Formulation
+## Example Content
 
-<!--
+### Mathematical Formulation
+
 Use LaTeX for equations:
--->
 
 $$
-f(x) = ax^2 + bx + c
+d = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}
 $$
 
 Where:
-- $a$, $b$, $c$ are coefficients
-- $x$ is the input variable
+- $d$ is the Euclidean distance
+- $x_i$ and $y_i$ are coordinates
+- $n$ is the number of dimensions
 
-## Implementation Notes
+### Algorithm Notes
 
-[Any hints about how to implement this correctly]
+Describe any specific approach:
 
-## References
+1. First, compute the element-wise differences
+2. Square each difference
+3. Sum all squared differences
+4. Take the square root
 
-- [Author et al. (Year). Paper title. Journal.](https://example.com)
+### Key Considerations
+
+- Handle edge cases like empty inputs
+- Consider numerical stability for large values
+- Account for floating-point precision
+
+---
+
+**DELETE EVERYTHING ABOVE** and write your actual background content!

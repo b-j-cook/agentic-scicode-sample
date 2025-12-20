@@ -41,6 +41,7 @@ class TaskValidator:
         """
         self.task_dir = Path(task_dir)
         self.errors: List[str] = []
+        self._is_template = self.task_dir.name == "_template"
         
     def validate(self) -> List[str]:
         """
@@ -99,13 +100,13 @@ class TaskValidator:
             elif not data[field]:
                 self.errors.append(f"Empty required field in problem.yaml: {field}")
         
-        # Validate problem_id format
+        # Validate problem_id format (skip for template)
         problem_id = data.get("problem_id", "")
-        if problem_id:
+        if problem_id and not self._is_template:
             if problem_id.isdigit():
                 self.errors.append(
                     f"problem_id '{problem_id}' should not be numeric. "
-                    "Use descriptive names like 'physics_lennard_jones' to avoid merge conflicts."
+                    "Use descriptive names like 'lennard_jones_potential' to avoid merge conflicts."
                 )
             if " " in problem_id:
                 self.errors.append(f"problem_id '{problem_id}' should not contain spaces")
@@ -114,9 +115,9 @@ class TaskValidator:
                     f"problem_id '{problem_id}' should only contain letters, numbers, underscores, and hyphens"
                 )
         
-        # Validate domain
+        # Validate domain (skip for template)
         domain = data.get("domain", "")
-        if domain and domain not in self.VALID_DOMAINS:
+        if domain and domain not in self.VALID_DOMAINS and not self._is_template:
             self.errors.append(
                 f"Invalid domain '{domain}'. Valid options: {', '.join(self.VALID_DOMAINS)}"
             )
@@ -217,7 +218,10 @@ class TaskValidator:
         errors = self.validate()
         
         if not errors:
-            print(f"✓ Task '{self.task_dir.name}' is valid")
+            if self._is_template:
+                print(f"✓ Template '{self.task_dir.name}' structure is valid")
+            else:
+                print(f"✓ Task '{self.task_dir.name}' is valid")
             return
         
         print(f"✗ Task '{self.task_dir.name}' has {len(errors)} error(s):")
