@@ -234,12 +234,15 @@ def cmd_list(args):
             problem_id = data.get("problem_id", "?")
             name = data.get("problem_name", "?")
             domain = data.get("domain", "?")
+            subdomain = data.get("subdomain", "")
             steps = len(data.get("steps", []))
             
             print(f"  {task_dir.name}/")
             print(f"    ID: {problem_id}")
             print(f"    Name: {name}")
             print(f"    Domain: {domain}")
+            if subdomain:
+                print(f"    Subdomain: {subdomain}")
             print(f"    Steps: {steps}")
             print()
         else:

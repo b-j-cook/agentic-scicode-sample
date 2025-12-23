@@ -343,6 +343,8 @@ class TaskCompiler:
         return {
             "problem_id": problem_id,
             "problem_name": self.problem_yaml.get("problem_name", ""),
+            "domain": self.problem_yaml.get("domain", ""),
+            "subdomain": self.problem_yaml.get("subdomain", ""),
             "problem_description_main": self.problem_yaml.get("description", ""),
             "problem_io": self.problem_yaml.get("io_spec", ""),
             "required_dependencies": dependencies,

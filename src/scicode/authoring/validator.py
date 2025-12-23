@@ -28,9 +28,19 @@ class TaskValidator:
         "chemistry", 
         "biology",
         "math",
+        "mathematics",
         "materials",
         "other",
     ]
+    
+    VALID_SUBDOMAINS = {
+        "mathematics": ["Numerical Linear Algebra", "Computational Mechanics"],
+        "math": ["Numerical Linear Algebra", "Computational Mechanics"],
+        "physics": ["Optics", "Computational Physics", "Quantum Information", "Particle Physics"],
+        "chemistry": ["Computational Chemistry"],
+        "materials": ["Semiconductor Materials"],
+        "biology": ["Biochemistry"],
+    }
     
     def __init__(self, task_dir: Path):
         """
@@ -121,6 +131,19 @@ class TaskValidator:
             self.errors.append(
                 f"Invalid domain '{domain}'. Valid options: {', '.join(self.VALID_DOMAINS)}"
             )
+        
+        # Validate subdomain (skip for template)
+        subdomain = data.get("subdomain", "")
+        if subdomain and domain in self.VALID_SUBDOMAINS and not self._is_template:
+            valid_subs = self.VALID_SUBDOMAINS[domain]
+            # Case-insensitive comparison
+            subdomain_lower = subdomain.lower()
+            valid_subs_lower = [s.lower() for s in valid_subs]
+            if subdomain_lower not in valid_subs_lower:
+                self.errors.append(
+                    f"Invalid subdomain '{subdomain}' for domain '{domain}'. "
+                    f"Valid options: {', '.join(valid_subs)}"
+                )
         
         # Check that all listed steps have corresponding files
         steps = data.get("steps", [])

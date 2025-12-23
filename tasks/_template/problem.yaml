@@ -28,8 +28,16 @@ problem_name: "Your Task Title"
 
 # DOMAIN
 # ------
-# Category for organization (physics, chemistry, biology, math, etc.)
+# Category for organization (physics, chemistry, biology, mathematics)
 domain: "your_domain"
+
+# Subdomain for organization
+# Mathematics: (Numerical Linear Algebra, Computational Mechanics)
+# Physics: (Optics, Computational Physics, Quantum Information, Particle Physics)
+# Chemistry: (Computational Chemistry)
+# Material Science: (Semiconductor Materials)
+# Biology: (Biochemistry)
+subdomain: "your_subdomain"
 
 
 # =============================================================================

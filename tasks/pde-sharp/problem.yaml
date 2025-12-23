@@ -27,8 +27,15 @@ problem_name: "PDE-SHARP Solver"
 
 # DOMAIN
 # ------
-# Category for organization (physics, chemistry, biology, math, etc.)
-domain: "math"
+# Category for organization (physics, chemistry, biology, mathematics)
+domain: "mathematics"
+# Subdomain for organization
+# Mathematics: (Numerical Linear Algebra, Computational Mechanics)
+# Physics: (Optics, Computational Physics, Quantum Information, Particle Physics)
+# Chemistry: (Computational Chemistry)
+# Material Science: (Semiconductor Materials)
+# Biology: (Biochemistry)
+subdomain: "computational mechanics"
 
 # =============================================================================
 # PROBLEM DESCRIPTION (shown to LLM as context)
