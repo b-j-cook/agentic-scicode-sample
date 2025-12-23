@@ -18,7 +18,7 @@
 # ---------------
 # A unique name for your task. Use descriptive snake_case names.
 # Examples: lennard_jones_potential, protein_folding, fft_implementation
-problem_id: "pde-sharp"
+problem_id: "pde_sharp"
 
 # DISPLAY NAME
 # ------------

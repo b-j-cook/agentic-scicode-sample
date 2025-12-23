@@ -38,14 +38,11 @@ task new my_task_name
 # - tasks/my_task_name/background/*.md (optional context)
 ```
 
-### 3. Validate and Compile
+### 3. Validate
 
 ```bash
 # Validate task structure
 task validate tasks/my_task_name/
-
-# Compile to evaluation format (generates eval/data/problems.jsonl and test_data.h5)
-task compile tasks/my_task_name/
 ```
 
 > **Note:** Compiled data files (`problems.jsonl`, `test_data.h5`) are not committed to the repo.
