@@ -1,0 +1,129 @@
+name: Paper Screening QC
+
+on:
+  pull_request:
+    paths:
+      - 'tasks/**/*.pdf'
+      - '!tasks/_template/**'
+  
+  workflow_dispatch:
+    inputs:
+      pdf_path:
+        description: 'Path to PDF file to screen (e.g., tasks/my_task/paper.pdf)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  screen-paper:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pymupdf openai
+      
+      - name: Get changed PDFs
+        id: get-pdfs
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get PDFs added or modified in task folders
+          PDFS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '^tasks/.*\.pdf$' | grep -v '^tasks/_template/' || true)
+          if [ -z "$PDFS" ]; then
+            echo "No PDF files changed in tasks/"
+            echo "pdfs=" >> $GITHUB_OUTPUT
+          else
+            echo "Found PDFs:"
+            echo "$PDFS"
+            # Convert newlines to spaces for the script
+            PDFS_INLINE=$(echo "$PDFS" | tr '\n' ' ')
+            echo "pdfs=$PDFS_INLINE" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Screen papers
+        id: screen
+        if: steps.get-pdfs.outputs.pdfs != '' || github.event_name == 'workflow_dispatch'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            python .github/scripts/screen_paper.py --pdf "${{ inputs.pdf_path }}" --output screening_report.md
+          else
+            python .github/scripts/screen_paper.py --pdf "${{ steps.get-pdfs.outputs.pdfs }}" --output screening_report.md
+          fi
+          
+          # Check for rejections
+          if grep -q '"overall_verdict": "REJECT"' screening_report.json 2>/dev/null; then
+            echo "has_rejection=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_rejection=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Post PR comment
+        if: github.event_name == 'pull_request' && steps.get-pdfs.outputs.pdfs != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            if (!fs.existsSync('screening_report.md')) {
+              console.log('No screening report found');
+              return;
+            }
+            
+            const report = fs.readFileSync('screening_report.md', 'utf8');
+            
+            // Find existing bot comment to update
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(c => 
+              c.user.type === 'Bot' && c.body.includes('📄 Paper Screening Report')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: report
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: report
+              });
+            }
+      
+      - name: Upload report artifact
+        if: steps.get-pdfs.outputs.pdfs != '' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: screening-report
+          path: |
+            screening_report.md
+            screening_report.json
+      
+      - name: Fail on rejection
+        if: steps.screen.outputs.has_rejection == 'true'
+        run: |
+          echo "❌ One or more papers were rejected. See the screening report for details."
+          exit 1
