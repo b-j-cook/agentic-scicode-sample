@@ -24,6 +24,51 @@ def _select_discretization(analysis: Dict, grid: np.ndarray) -> Dict:
     return discretization
 
 
+def _gold_setup_grid(grid: np.ndarray) -> Tuple[float, float, int, int]:
+    """Extract grid parameters from the discretization grid."""
+    if grid.ndim == 3:
+        Ny, Nx = grid.shape[1], grid.shape[2]
+        x = grid[0]
+        y = grid[1]
+    else:
+        x = grid[0]
+        y = grid[1]
+        if x.ndim == 1:
+            Nx = len(x)
+            Ny = len(y)
+        else:
+            Ny, Nx = x.shape
+    
+    if x.ndim == 2:
+        dx = x[0, 1] - x[0, 0] if Nx > 1 else 1.0
+        dy = y[1, 0] - y[0, 0] if Ny > 1 else 1.0
+    else:
+        dx = x[1] - x[0] if len(x) > 1 else 1.0
+        dy = y[1] - y[0] if len(y) > 1 else 1.0
+    
+    return dx, dy, Ny, Nx
+
+
+def _gold_initialize_solution(parameters: Dict, Ny: int, Nx: int) -> np.ndarray:
+    """Initialize solution field."""
+    u = np.zeros((Ny, Nx))
+    if 'initial_condition' in parameters:
+        u = parameters['initial_condition'].copy()
+    return u
+
+
+def _gold_apply_boundary_conditions(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
+    """Apply boundary conditions to the solution field."""
+    if 'values' in boundary_conditions:
+        vals = boundary_conditions['values']
+        if isinstance(vals, dict):
+            if 'left' in vals: u[:,0] = vals['left']
+            if 'right' in vals: u[:,-1] = vals['right']
+            if 'bottom' in vals: u[0,:] = vals['bottom']
+            if 'top' in vals: u[-1,:] = vals['top']
+    return u
+
+
 # =============================================================================
 # FUNCTION SIGNATURE
 # =============================================================================
@@ -67,15 +112,15 @@ def _gold_genesis_solver(
     discretization = _select_discretization(analysis, grid)
     
     # Genesis prompt 2: Setup grid
-    dx, dy, Ny, Nx = setup_grid(grid)
+    dx, dy, Ny, Nx = _gold_setup_grid(grid)
     
     # Genesis prompt 3: Initialize solution
-    u = initialize_solution(parameters, Ny, Nx)
+    u = _gold_initialize_solution(parameters, Ny, Nx)
     
     # Genesis prompt 4: Apply boundary conditions
     has_initial_condition = 'initial_condition' in parameters and parameters['initial_condition'] is not None
     if not has_initial_condition:
-        u = apply_boundary_conditions(u, boundary_conditions)
+        u = _gold_apply_boundary_conditions(u, boundary_conditions)
     
     return u, dx, dy, Ny, Nx
 

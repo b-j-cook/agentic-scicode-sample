@@ -30,9 +30,12 @@ from scicode.authoring.validator import TaskValidator
 
 
 def get_project_root():
-    """Get the project root directory."""
-    # Navigate up from src/scicode/authoring/cli.py to project root
-    return Path(__file__).parent.parent.parent.parent
+    """Get the project root directory.
+    
+    Uses the current working directory as the base, since this CLI
+    is meant to be run from the project root.
+    """
+    return Path.cwd()
 
 
 def cmd_new(args):
