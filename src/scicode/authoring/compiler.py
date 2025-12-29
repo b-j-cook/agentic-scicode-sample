@@ -87,6 +87,7 @@ class TaskCompiler:
         main_func = None
         gold_func = None
         test_cases_func = None
+        helper_funcs = []  # Helper functions used by gold solution
         
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
@@ -94,6 +95,9 @@ class TaskCompiler:
                     gold_func = node
                 elif node.name == "test_cases":
                     test_cases_func = node
+                elif node.name.startswith("_") and not node.name.startswith("__"):
+                    # Helper function (starts with _ but not __ or _gold_)
+                    helper_funcs.append(node)
                 elif not node.name.startswith("_"):
                     main_func = node
         
@@ -109,10 +113,18 @@ class TaskCompiler:
         # Extract and run test cases
         test_cases = self._extract_test_cases(step_path, content)
         
-        # Extract gold solution code
-        gold_code = ""
+        # Extract gold solution code (including helper functions)
+        gold_code_parts = []
+        
+        # Add helper functions first (they may be called by gold function)
+        for helper in helper_funcs:
+            gold_code_parts.append(ast.unparse(helper))
+        
+        # Add the main gold function
         if gold_func:
-            gold_code = ast.unparse(gold_func)
+            gold_code_parts.append(ast.unparse(gold_func))
+        
+        gold_code = "\n\n".join(gold_code_parts)
         
         return {
             "step_name": step_name,

@@ -50,7 +50,7 @@ def _evaluate_candidate_poisson(
             neighbors_sum = (u_candidate[2:, 1:-1] + u_candidate[:-2, 1:-1] +
                            u_candidate[1:-1, 2:] + u_candidate[1:-1, :-2])
             source_term = f[1:-1,1:-1] * dx**2
-            new_value = (neighbors_sum + source_term) / 4.0
+            new_value = (neighbors_sum - source_term) / 4.0
             new_value = np.clip(new_value, -1e6, 1e6)
             u_candidate[1:-1,1:-1] = (1 - omega) * interior + omega * new_value
             u_candidate = np.clip(u_candidate, -1e6, 1e6)

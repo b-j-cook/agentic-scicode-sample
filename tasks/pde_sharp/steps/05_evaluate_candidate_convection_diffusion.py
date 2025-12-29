@@ -45,7 +45,7 @@ def evaluate_candidate_convection_diffusion(
 # GOLD SOLUTION
 # =============================================================================
 
-def _gold_apply_dirichlet(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
+def _apply_dirichlet(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
     """Helper: Apply boundary values."""
     if 'values' in boundary_conditions:
         vals = boundary_conditions['values']
@@ -108,7 +108,7 @@ def _gold_evaluate_candidate_convection_diffusion(
         du = dt * (diffusion - convection + src)
         u_candidate[1:-1, 1:-1] += du
     
-    u_candidate = _gold_apply_dirichlet(u_candidate, boundary_conditions)
+    u_candidate = _apply_dirichlet(u_candidate, boundary_conditions)
     proxy_error = np.std(np.abs(np.gradient(u_candidate)))
     
     return u_candidate, proxy_error
