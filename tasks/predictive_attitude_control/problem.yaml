@@ -1,0 +1,174 @@
+# =============================================================================
+# Task Definition
+# =============================================================================
+#
+# This file defines your task's metadata and structure.
+#
+# WORKFLOW:
+# 1. Run: task new my_task_name
+# 2. Edit this file - fill in all sections below
+# 3. Edit steps/*.py - implement each sub-problem
+# 4. (Optional) Edit background/*.md - add domain context
+# 5. Run: task validate tasks/my_task_name/
+# 6. Run: task compile tasks/my_task_name/
+#
+# =============================================================================
+
+
+# TASK IDENTIFIER
+# ---------------
+# A unique name for your task. Use descriptive snake_case names.
+# Examples: lennard_jones_potential, protein_folding, fft_implementation
+problem_id: "predictive_attitude_control"
+
+# DISPLAY NAME
+# ------------
+# Human-readable title shown in listings and reports.
+problem_name: "Time-Varying MPC for Magnetically Actuated Dual-Spin Satellites"
+
+# DOMAIN
+# ------
+# Category for organization (physics, chemistry, biology, mathematics)
+domain: "physics"
+
+# Subdomain for organization
+# Mathematics: (Numerical Linear Algebra, Computational Mechanics)
+# Physics: (Optics, Computational Physics, Quantum Information, Particle Physics)
+# Chemistry: (Computational Chemistry)
+# Material Science: (Semiconductor Materials)
+# Biology: (Biochemistry)
+subdomain: "computational physics"
+
+
+# =============================================================================
+# PROBLEM DESCRIPTION (shown to LLM as context)
+# =============================================================================
+# Describe the overall problem. This appears at the start of prompts.
+
+description: |
+  You are building a Model Predictive Control (MPC) system for a 3U CubeSat using dual-spin stabilization.
+  The system relies on magnetorquers, which create a magnetic field to oppose the Earth's magnetic field,
+  thereby providing torque. This creates an underactuated system as torque can only be produced
+  orthogonal to the local magnetic field vector.
+
+  The implementation is organized into three primary stages:
+  1. Physical Modeling: Define Earth's magnetic field (tilted dipole) and the satellite's
+     nonlinear dynamics (Euler equations for a dual-spin body).
+  2. Linearization & Discretization: Linearize the nonlinear dynamics around a nominal
+     trajectory and discretize the system for use in a discrete-time predictive controller.
+  3. Optimal Control Synthesis: Formulate and solve a constrained Quadratic Program (QP)
+     to find optimal control inputs, applying Successive Linearization (SL-MPC) to handle
+     model errors and ensure the satellite maintains pointing within a specified half-cone angle.
+
+  Assumptions and Simplifications:
+  - Magnetic Field: Uses a Tilted Dipole model instead of the World Magnetic Model (WMM) to eliminate external data dependencies.
+  - Disturbance Torques: Only gravity gradient torques are modeled; aerodynamic drag, solar radiation pressure, and magnetic residual dipoles are neglected.
+  - Numerical Solver: Uses Scipy's SLSQP for QP solving rather than specialized solvers like OSQP.
+  - MPC Iterations: Performs a single Successive Linearization (SL) update per control step rather than multiple iterations.
+  - State Estimation: Assumes perfect state knowledge (no Kalman filtering or sensor noise).
+
+# =============================================================================
+# I/O SPECIFICATION (shown to LLM)
+# =============================================================================
+# Document the overall input/output contract. This helps the model understand
+# what data types and formats to expect.
+
+io_spec: |
+  """
+  Time-Varying MPC for Dual-Spin Satellite
+  
+  Parameters
+  ----------
+  inertia : np.ndarray (3, 3)
+      Inertia matrix of the satellite (kg·m²).
+  h_w : float
+      Angular momentum of the momentum wheel (N·m·s), aligned with body z-axis.
+  orbit_params : dict
+      - 'altitude': Orbit altitude (m)
+      - 'inclination': Orbit inclination (deg)
+      - 'omega_orbit': Orbital angular velocity (rad/s)
+  mpc_params : dict
+      - 'horizon': Prediction horizon N (integer steps)
+      - 'dt': Control/prediction time step (s)
+      - 'Q': State weighting matrix (6x6)
+      - 'R': Control weighting matrix (3x3)
+  duration : float
+      Total simulation duration (s).
+  constraints : dict
+      - 'm_max': Maximum magnetic dipole moment per axis (A·m²)
+      - 'max_cone_angle': Maximum allowable pointing half-cone error (deg)
+      - 'min_spin_rate': Minimum required angular velocity around boresight (rad/s)
+      - 'target_q': np.ndarray (4,), Target inertial pointing quaternion (default: Identity)
+  initial_state : np.ndarray (7,)
+      Initial state [q0, q1, q2, q3, wx, wy, wz] (quaternion + angular velocity).
+
+  Returns
+  -------
+  metrics : dict
+      - 'max_error': Maximum pointing half-cone angle error (deg)
+      - 'avg_error': RMS pointing error (deg)
+      - 'power_index': Total integral of squared dipole moments (A²·m⁴·s)
+      - 'settling_time': Time to reach and stay within 1 deg of target (s)
+      - 'is_stable': Boolean, true if state constraints were satisfied.
+      - 'momentum_error': Max violation of Delta H = integral(tau) dt (Nms)
+      - 'orthogonality_error': Max (m x B) . B (Nm)
+  """
+
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+# Python imports available to the model. These are prepended to generated code.
+
+dependencies:
+  - import numpy as np
+  - from scipy.linalg import expm
+  - from scipy.optimize import minimize, LinearConstraint, Bounds
+  - from scipy.integrate import solve_ivp
+  - from scipy.spatial.transform import Rotation as R
+
+
+# =============================================================================
+# STEPS
+# =============================================================================
+# List of step files in order (without .py extension).
+# Each step should have a corresponding file: steps/01_step_name.py
+# Steps are solved sequentially - later steps can use earlier functions.
+
+steps:
+  - 01_environmental_models
+  - 02_dynamics_ode
+  - 03_linearization_discretization
+  - 04_mpc_solver
+  - 05_sl_mpc_update
+  - 06_propagate_step
+  - 07_evaluate_metrics
+  - 08_physics_verification
+  - 09_run_mpc_simulation
+
+
+# =============================================================================
+# BACKGROUND (OPTIONAL)
+# =============================================================================
+# Overall background shown when with_background=True.
+# Leave empty or delete if not needed.
+
+background_main: |
+  Based on "Time-Varying Model Predictive Attitude Control for Magnetically Actuated Dual-Spin Satellites" (Halverson & Caverly, 2025).
+  
+  The implementation follows a three-stage framework:
+
+  1. **Physical Modeling (Steps 1-2)**:
+     - **Magnetic Field**: Tilted dipole model $B(r, t)$ accounting for Earth's rotation.
+     - **Dynamics**: Nonlinear Euler equations for a rigid body with an internal momentum wheel.
+     - **Disturbances**: Gravity gradient torques.
+
+  2. **Linearization & Discretization (Steps 3, 5)**:
+     - **Linearization**: Small-angle approximations and Taylor expansion around a trajectory.
+     - **Discretization**: Conversion of continuous-time state-space models to discrete-time.
+     - **Successive Linearization (SL-MPC)**: Iterative trajectory refinement to improve predictive accuracy.
+
+  3. **Optimal Control Synthesis (Steps 4, 6-9)**:
+     - **Quadratic Programming (QP)**: Formulation of the MPC cost function and constraints into a solvable optimization problem.
+     - **Verification**: Validation of simulation results against physical invariants (momentum conservation, torque orthogonality).
+     - **Underactuation**: Handling the instantaneous rank deficiency of the magnetic control matrix.
