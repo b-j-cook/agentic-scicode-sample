@@ -252,6 +252,8 @@ class TaskCompiler:
         problem_id = self.problem_yaml["problem_id"]
         
         # Build execution context with all gold functions
+        # We map both _gold_X and X to the gold function so that gold solutions
+        # calling functions from previous steps get the real implementation
         exec_context = {"np": np, "numpy": np}
         
         for step_data in self.steps:
@@ -269,9 +271,26 @@ class TaskCompiler:
                 print(f"Error loading {step_path}: {e}")
                 continue
             
-            # Add all functions to context for subsequent steps
+            # First pass: collect all gold functions from this module
+            gold_funcs = {}
             for name in dir(module):
-                if callable(getattr(module, name)) and not name.startswith('__'):
+                if callable(getattr(module, name)) and name.startswith('_gold_'):
+                    func = getattr(module, name)
+                    main_name = name[6:]  # Remove '_gold_' prefix
+                    gold_funcs[name] = func
+                    gold_funcs[main_name] = func  # Also map under main name
+            
+            # Add gold functions to exec_context
+            exec_context.update(gold_funcs)
+            
+            # CRITICAL: Also inject gold functions back into the module's namespace
+            # This ensures that when the gold function runs, it sees gold versions
+            # of previous steps' functions (not placeholder stubs)
+            module.__dict__.update(exec_context)
+            
+            # Add helper functions (start with _ but not _gold_)
+            for name in dir(module):
+                if callable(getattr(module, name)) and name.startswith('_') and not name.startswith('__') and not name.startswith('_gold_'):
                     exec_context[name] = getattr(module, name)
             
             # Generate targets for each test case
