@@ -1,0 +1,106 @@
+# =============================================================================
+# Task Definition
+# =============================================================================
+#
+# This file defines your task's metadata and structure.
+#
+# WORKFLOW:
+# 1. Run: task new my_task_name
+# 2. Edit this file - fill in all sections below
+# 3. Edit steps/*.py - implement each sub-problem
+# 4. (Optional) Edit background/*.md - add domain context
+# 5. Run: task validate tasks/my_task_name/
+# 6. Run: task compile tasks/my_task_name/
+#
+# =============================================================================
+
+
+# TASK IDENTIFIER
+# ---------------
+# A unique name for your task. Use descriptive snake_case names.
+# Examples: lennard_jones_potential, protein_folding, fft_implementation
+problem_id: "IPCC"
+
+# DISPLAY NAME
+# ------------
+# Human-readable title shown in listings and reports.
+problem_name: "e⁺e⁻ Internal Pair Creation after nucleus de-excitation"
+
+# DOMAIN
+# ------
+# Category for organization (physics, chemistry, biology, mathematics)
+domain: "physics"
+
+# Subdomain for organization
+# Mathematics: (Numerical Linear Algebra, Computational Mechanics)
+# Physics: (Optics, Computational Physics, Quantum Information, Particle Physics)
+# Chemistry: (Computational Chemistry)
+# Material Science: (Semiconductor Materials)
+# Biology: (Biochemistry)
+subdomain: "particle physics"
+
+
+# =============================================================================
+# PROBLEM DESCRIPTION (shown to LLM as context)
+# =============================================================================
+# Describe the overall problem. This appears at the start of prompts.
+
+description: |
+  """We consider the following process in particle physics: $p + A -> N^* -> N + e⁺e⁻$, with $p$ proton, $A$ target atom, $N$ nucleus like Berrylium 8 or Helium 4 and $N^*$ is excited state. 
+     In this process, a proton beam collides with a target nucleus $A$ at rest, with the aim of producing an excited nucleus $N^∗$ and measure its IPC transition to a ground state $N$. 
+     The de-excitation of the nucleus produces a pair of electron/positron (it's called Internal Pair Creation). 
+     We note k the energy transition of the excited nucleus, w1 the energy of the electron produced, w2 the energy of the positron. We have k=w1+w2.
+     Those energies are expressed in units of the e⁻ mass. The mass of the electron is me = 0.511 MeV/c². We also note Th correlation angle between e- and e+."""
+
+
+# =============================================================================
+# I/O SPECIFICATION (shown to LLM)
+# =============================================================================
+# Document the overall input/output contract. This helps the model understand
+# what data types and formats to expect.
+
+io_spec: |
+  """
+  e-/e+ Internal Pair Creation after nucleus de-excitation.
+  Parameters
+  ----------
+  k : float
+      nucleus energy transition (in units of e- mass).
+  Returns
+  -------
+  result : float
+      Internal Pair Creation.
+  """
+
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+# Python imports available to the model. These are prepended to generated code.
+
+dependencies:
+  - import numpy as np
+  - import math
+  - import random
+  - import scipy.constants as cst
+
+# =============================================================================
+# STEPS
+# =============================================================================
+# List of step files in order (without .py extension).
+# Each step should have a corresponding file: steps/01_step_name.py
+# Steps are solved sequentially - later steps can use earlier functions.
+
+steps:
+  - 01_gamma_electric_transition
+  - 02_gamma_magnetic_transition
+  - 03_IPCC
+
+
+# =============================================================================
+# BACKGROUND (OPTIONAL)
+# =============================================================================
+# Overall background shown when with_background=True.
+# Leave empty or delete if not needed.
+
+background_main: |
