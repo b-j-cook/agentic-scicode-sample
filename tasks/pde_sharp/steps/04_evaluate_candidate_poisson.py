@@ -44,18 +44,6 @@ def evaluate_candidate_poisson(
 # GOLD SOLUTION
 # =============================================================================
 
-def _gold_apply_dirichlet(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
-    """Helper: Apply boundary values on all four sides."""
-    if 'values' in boundary_conditions:
-        vals = boundary_conditions['values']
-        if isinstance(vals, dict):
-            if 'left' in vals: u[:,0] = vals['left']
-            if 'right' in vals: u[:,-1] = vals['right']
-            if 'bottom' in vals: u[0,:] = vals['bottom']
-            if 'top' in vals: u[-1,:] = vals['top']
-    return u
-
-
 def _gold_evaluate_candidate_poisson(
     candidate: str,
     u: np.ndarray,
@@ -82,12 +70,12 @@ def _gold_evaluate_candidate_poisson(
             neighbors_sum = (u_candidate[2:, 1:-1] + u_candidate[:-2, 1:-1] +
                            u_candidate[1:-1, 2:] + u_candidate[1:-1, :-2])
             source_term = f[1:-1, 1:-1] * dx**2
-            new_value = (neighbors_sum + source_term) / 4.0
+            new_value = (neighbors_sum - source_term) / 4.0
             new_value = np.clip(new_value, -1e6, 1e6)
             u_candidate[1:-1, 1:-1] = (1 - omega) * interior + omega * new_value
             u_candidate = np.clip(u_candidate, -1e6, 1e6)
         
-        u_candidate = _gold_apply_dirichlet(u_candidate, boundary_conditions)
+        u_candidate = apply_boundary_conditions(u_candidate, boundary_conditions)
         
         change = u_candidate[1:-1, 1:-1] - u_old[1:-1, 1:-1]
         residual = np.linalg.norm(change)

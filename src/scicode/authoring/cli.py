@@ -185,19 +185,30 @@ def cmd_test(args):
         return 1
     
     # Run eval with gold mode on this specific problem
+    # Use relative paths to avoid Python 3.13 pathlib.glob() issues with absolute paths
     project_root = get_project_root()
+    inspect_dir = project_root / "eval/inspect_ai"
+    
     cmd = [
-        "inspect", "eval", str(project_root / "eval/inspect_ai/scicode.py"),
+        "inspect", "eval", "scicode.py",  # Relative path from inspect_dir
         "--model", "openai/gpt-4o",  # Model doesn't matter in gold mode
         "-T", "mode=gold",
         "-T", f"problems={problem_id}",
-        "-T", "output_dir=./tmp_test",
+        "-T", "output_dir=../../tmp_test",
+        "-T", "local_jsonl=../data/problems.jsonl",
+        "-T", "h5py_file=../data/test_data.h5",
     ]
     
-    print(f"Running: {' '.join(cmd)}")
+    print(f"Running from {inspect_dir}: {' '.join(cmd)}")
     print()
     
-    result = subprocess.run(cmd, cwd=project_root)
+    # Set dummy API key for gold mode (doesn't actually call the API)
+    import os
+    env = os.environ.copy()
+    if "OPENAI_API_KEY" not in env:
+        env["OPENAI_API_KEY"] = "sk-dummy-key-for-gold-mode"
+    
+    result = subprocess.run(cmd, cwd=inspect_dir, env=env)
     
     if result.returncode == 0:
         print("\n✓ Task passed evaluation with gold solutions!")

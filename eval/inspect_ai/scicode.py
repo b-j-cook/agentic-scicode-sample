@@ -233,6 +233,35 @@ class ScicodeEvaluator:
 
 from scicode.parse.parse import process_hdf5_to_tuple
 
+# Helper for comparing tuples with mixed types (array, scalar)
+_original_allclose = np.allclose
+
+def _robust_allclose(a, b, rtol=1e-05, atol=1e-08):
+    '''Compare two values, handling tuples with mixed types.'''
+    if isinstance(a, tuple) and isinstance(b, tuple):
+        if len(a) != len(b):
+            return False
+        return all(_robust_allclose(x, y, rtol, atol) for x, y in zip(a, b))
+    elif isinstance(a, list) and isinstance(b, list):
+        if len(a) != len(b):
+            return False
+        return all(_robust_allclose(x, y, rtol, atol) for x, y in zip(a, b))
+    elif isinstance(a, tuple) and isinstance(b, np.ndarray):
+        # Target stored as array, result is tuple - compare element-wise
+        if len(a) != len(b):
+            return False
+        return all(_original_allclose(x, y, rtol=rtol, atol=atol) for x, y in zip(a, b))
+    elif isinstance(a, np.ndarray) and isinstance(b, tuple):
+        # Reverse of above
+        if len(a) != len(b):
+            return False
+        return all(_original_allclose(x, y, rtol=rtol, atol=atol) for x, y in zip(a, b))
+    else:
+        return _original_allclose(a, b, rtol=rtol, atol=atol)
+
+# Monkey-patch np.allclose for this test
+np.allclose = _robust_allclose
+
 """)
                 f.write(f"targets = process_hdf5_to_tuple('{step_id}', {len(test_lst)}, '{self.h5py_file}')" + '\n')
                 for i in range(len(test_lst)):

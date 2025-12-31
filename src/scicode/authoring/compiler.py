@@ -87,6 +87,7 @@ class TaskCompiler:
         main_func = None
         gold_func = None
         test_cases_func = None
+        helper_funcs = []  # Helper functions used by gold solution
         
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
@@ -94,6 +95,9 @@ class TaskCompiler:
                     gold_func = node
                 elif node.name == "test_cases":
                     test_cases_func = node
+                elif node.name.startswith("_") and not node.name.startswith("__"):
+                    # Helper function (starts with _ but not __ or _gold_)
+                    helper_funcs.append(node)
                 elif not node.name.startswith("_"):
                     main_func = node
         
@@ -109,10 +113,18 @@ class TaskCompiler:
         # Extract and run test cases
         test_cases = self._extract_test_cases(step_path, content)
         
-        # Extract gold solution code
-        gold_code = ""
+        # Extract gold solution code (including helper functions)
+        gold_code_parts = []
+        
+        # Add helper functions first (they may be called by gold function)
+        for helper in helper_funcs:
+            gold_code_parts.append(ast.unparse(helper))
+        
+        # Add the main gold function
         if gold_func:
-            gold_code = ast.unparse(gold_func)
+            gold_code_parts.append(ast.unparse(gold_func))
+        
+        gold_code = "\n\n".join(gold_code_parts)
         
         return {
             "step_name": step_name,
@@ -240,6 +252,8 @@ class TaskCompiler:
         problem_id = self.problem_yaml["problem_id"]
         
         # Build execution context with all gold functions
+        # We map both _gold_X and X to the gold function so that gold solutions
+        # calling functions from previous steps get the real implementation
         exec_context = {"np": np, "numpy": np}
         
         for step_data in self.steps:
@@ -257,9 +271,26 @@ class TaskCompiler:
                 print(f"Error loading {step_path}: {e}")
                 continue
             
-            # Add all functions to context for subsequent steps
+            # First pass: collect all gold functions from this module
+            gold_funcs = {}
             for name in dir(module):
-                if callable(getattr(module, name)) and not name.startswith('__'):
+                if callable(getattr(module, name)) and name.startswith('_gold_'):
+                    func = getattr(module, name)
+                    main_name = name[6:]  # Remove '_gold_' prefix
+                    gold_funcs[name] = func
+                    gold_funcs[main_name] = func  # Also map under main name
+            
+            # Add gold functions to exec_context
+            exec_context.update(gold_funcs)
+            
+            # CRITICAL: Also inject gold functions back into the module's namespace
+            # This ensures that when the gold function runs, it sees gold versions
+            # of previous steps' functions (not placeholder stubs)
+            module.__dict__.update(exec_context)
+            
+            # Add helper functions (start with _ but not _gold_)
+            for name in dir(module):
+                if callable(getattr(module, name)) and name.startswith('_') and not name.startswith('__') and not name.startswith('_gold_'):
                     exec_context[name] = getattr(module, name)
             
             # Generate targets for each test case

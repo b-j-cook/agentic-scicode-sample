@@ -84,7 +84,7 @@ def _analyze_pde(pde_description: Dict, parameters: Dict) -> Dict:
 # Genesis stage helpers (from steps 01-03, 06)
 # -----------------------------------------------------------------------------
 
-def _gold_setup_grid(grid: np.ndarray) -> Tuple[float, float, int, int]:
+def _setup_grid(grid: np.ndarray) -> Tuple[float, float, int, int]:
     """Extract grid parameters from the discretization grid."""
     if grid.ndim == 3:
         Ny, Nx = grid.shape[1], grid.shape[2]
@@ -109,7 +109,7 @@ def _gold_setup_grid(grid: np.ndarray) -> Tuple[float, float, int, int]:
     return dx, dy, Ny, Nx
 
 
-def _gold_initialize_solution(parameters: Dict, Ny: int, Nx: int) -> np.ndarray:
+def _initialize_solution(parameters: Dict, Ny: int, Nx: int) -> np.ndarray:
     """Initialize solution field."""
     u = np.zeros((Ny, Nx))
     if 'initial_condition' in parameters:
@@ -117,7 +117,7 @@ def _gold_initialize_solution(parameters: Dict, Ny: int, Nx: int) -> np.ndarray:
     return u
 
 
-def _gold_apply_boundary_conditions(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
+def _apply_boundary_conditions(u: np.ndarray, boundary_conditions: Dict) -> np.ndarray:
     """Apply boundary conditions to the solution field."""
     if 'values' in boundary_conditions:
         vals = boundary_conditions['values']
@@ -129,18 +129,18 @@ def _gold_apply_boundary_conditions(u: np.ndarray, boundary_conditions: Dict) ->
     return u
 
 
-def _gold_genesis_solver(
+def _genesis_solver(
     grid: np.ndarray,
     boundary_conditions: Dict,
     parameters: Dict,
     analysis: Dict
 ) -> Tuple[np.ndarray, float, float, int, int]:
     """Stage 2: Genesis - set up grid and initial conditions."""
-    dx, dy, Ny, Nx = _gold_setup_grid(grid)
-    u = _gold_initialize_solution(parameters, Ny, Nx)
+    dx, dy, Ny, Nx = _setup_grid(grid)
+    u = _initialize_solution(parameters, Ny, Nx)
     has_initial_condition = 'initial_condition' in parameters and parameters['initial_condition'] is not None
     if not has_initial_condition:
-        u = _gold_apply_boundary_conditions(u, boundary_conditions)
+        u = _apply_boundary_conditions(u, boundary_conditions)
     return u, dx, dy, Ny, Nx
 
 
@@ -174,12 +174,12 @@ def _evaluate_candidate_poisson(
             neighbors_sum = (u_candidate[2:, 1:-1] + u_candidate[:-2, 1:-1] +
                            u_candidate[1:-1, 2:] + u_candidate[1:-1, :-2])
             source_term = f[1:-1,1:-1] * dx**2
-            new_value = (neighbors_sum + source_term) / 4.0
+            new_value = (neighbors_sum - source_term) / 4.0
             new_value = np.clip(new_value, -1e6, 1e6)
             u_candidate[1:-1,1:-1] = (1 - omega) * interior + omega * new_value
             u_candidate = np.clip(u_candidate, -1e6, 1e6)
         
-        u_candidate = _gold_apply_boundary_conditions(u_candidate, boundary_conditions)
+        u_candidate = _apply_boundary_conditions(u_candidate, boundary_conditions)
         
         change = u_candidate[1:-1,1:-1] - u_old[1:-1,1:-1]
         residual = np.linalg.norm(change)
@@ -254,7 +254,7 @@ def _evaluate_candidate_convection_diffusion(
         du = dt * (diffusion - convection + src)
         u_candidate[1:-1,1:-1] += du
     
-    u_candidate = _gold_apply_boundary_conditions(u_candidate, boundary_conditions)
+    u_candidate = _apply_boundary_conditions(u_candidate, boundary_conditions)
     proxy_error = np.std(np.abs(np.gradient(u_candidate)))
     
     return u_candidate, proxy_error
@@ -297,7 +297,7 @@ def _judge_all_candidates(
     return sorted(results, key=lambda x: x[2])
 
 
-def _gold_synthesize_solver(
+def _synthesize_solver(
     u: np.ndarray,
     grid: np.ndarray,
     analysis: Dict,
@@ -360,10 +360,10 @@ def _gold_pde_sharp_solve(
     analysis = _analyze_pde(pde_description, parameters)
     
     # Stage 2: Genesis
-    u, dx, dy, Ny, Nx = _gold_genesis_solver(grid, boundary_conditions, parameters, analysis)
+    u, dx, dy, Ny, Nx = _genesis_solver(grid, boundary_conditions, parameters, analysis)
     
     # Stage 3: Synthesis
-    best_u = _gold_synthesize_solver(u, grid, analysis, boundary_conditions, parameters, dx, dy, Ny, Nx)
+    best_u = _synthesize_solver(u, grid, analysis, boundary_conditions, parameters, dx, dy, Ny, Nx)
     
     return best_u
 
