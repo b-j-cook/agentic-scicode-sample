@@ -200,11 +200,11 @@ jobs:
             
             # Check for 100% pass rate in gold mode
             # Gold mode should always pass all steps since it uses the reference solution
-            if echo "$OUTPUT" | grep -q "accuracy: 1\.0\|100%\|1/1"; then
+            if echo "$OUTPUT" | grep -qE "accuracy: 1\.0|100%|1/1|sub_problem_correctness: 1(\.0)?|Problem Correctness/mean: 1(\.0)?"; then
               echo "✓ Gold mode test passed with 100% accuracy for $task"
             else
               # Parse the accuracy from output
-              ACCURACY=$(echo "$OUTPUT" | grep -oE "accuracy: [0-9.]+" | tail -1 | grep -oE "[0-9.]+") || ACCURACY="unknown"
+              ACCURACY=$(echo "$OUTPUT" | grep -oE "(accuracy|sub_problem_correctness): [0-9.]+" | tail -1 | grep -oE "[0-9.]+") || ACCURACY="unknown"
               
               if [ "$ACCURACY" = "1" ] || [ "$ACCURACY" = "1.0" ]; then
                 echo "✓ Gold mode test passed with 100% accuracy for $task"
