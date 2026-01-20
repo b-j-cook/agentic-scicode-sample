@@ -1,0 +1,539 @@
+{
+  "metadata": {
+    "language": "go",
+    "num_correctness_criteria": 55,
+    "num_fail_to_pass": 52,
+    "num_pass_to_pass": 3
+  },
+  "correctness": [
+    {
+      "id": "correctness-f2p-1",
+      "description": "Test `TestCheckCompatible` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestCheckCompatible`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestCheckCompatible",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-2",
+      "description": "Test `TestConfigRules` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestConfigRules`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestConfigRules",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-3",
+      "description": "Test `TestCalculateCoinbase/Nil_coinbase_configuration` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestCalculateCoinbase/Nil_coinbase_configuration`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestCalculateCoinbase/Nil_coinbase_configuration",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-4",
+      "description": "Test `TestCalculateCoinbase/Multiple_coinbase_addresses` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestCalculateCoinbase/Multiple_coinbase_addresses`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestCalculateCoinbase/Multiple_coinbase_addresses",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-5",
+      "description": "Test `TestCalculateCoinbase` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestCalculateCoinbase`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestCalculateCoinbase",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-6",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_500_Before_any_overrides_-_normal_operation` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_500_Before_any_overrides_-_normal_operation`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_500_Before_any_overrides_-_normal_operation",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-7",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_1000_Start_of_first_override_range_-_limit_to_5_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_1000_Start_of_first_override_range_-_limit_to_5_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_1000_Start_of_first_override_range_-_limit_to_5_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-8",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_1500_Middle_of_first_override_range_-_limit_to_5_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_1500_Middle_of_first_override_range_-_limit_to_5_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_1500_Middle_of_first_override_range_-_limit_to_5_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-9",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_2000_End_of_first_override_range_-_limit_to_5_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_2000_End_of_first_override_range_-_limit_to_5_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_2000_End_of_first_override_range_-_limit_to_5_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-10",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_2500_Between_ranges_-_normal_operation` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_2500_Between_ranges_-_normal_operation`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_2500_Between_ranges_-_normal_operation",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-11",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_3000_Start_of_maintenance_period_-_no_state_sync_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_3000_Start_of_maintenance_period_-_no_state_sync_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_3000_Start_of_maintenance_period_-_no_state_sync_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-12",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_3500_Middle_of_maintenance_period_-_no_state_sync_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_3500_Middle_of_maintenance_period_-_no_state_sync_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_3500_Middle_of_maintenance_period_-_no_state_sync_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-13",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_4000_End_of_maintenance_period_-_no_state_sync_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_4000_End_of_maintenance_period_-_no_state_sync_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_4000_End_of_maintenance_period_-_no_state_sync_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-14",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_4500_Between_ranges_-_normal_operation` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_4500_Between_ranges_-_normal_operation`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_4500_Between_ranges_-_normal_operation",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-15",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_5000_Start_of_high-capacity_range_-_allow_up_to_10_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_5000_Start_of_high-capacity_range_-_allow_up_to_10_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_5000_Start_of_high-capacity_range_-_allow_up_to_10_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-16",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_5500_Middle_of_high-capacity_range_-_allow_up_to_10_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_5500_Middle_of_high-capacity_range_-_allow_up_to_10_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_5500_Middle_of_high-capacity_range_-_allow_up_to_10_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-17",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_6000_End_of_high-capacity_range_-_allow_up_to_10_records` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_6000_End_of_high-capacity_range_-_allow_up_to_10_records`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_6000_End_of_high-capacity_range_-_allow_up_to_10_records",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-18",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Block_6500_After_all_overrides_-_normal_operation` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Block_6500_After_all_overrides_-_normal_operation`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Block_6500_After_all_overrides_-_normal_operation",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-19",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample/Practical_Usage_Example` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample/Practical_Usage_Example`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample/Practical_Usage_Example",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-20",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeExample` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeExample`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeExample",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-21",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-22",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_1000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_1000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_1000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-23",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_1500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_1500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_1500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-24",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_2000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_2000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_2000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-25",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_2500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_2500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_2500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-26",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_3000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_3000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_3000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-27",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_3500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_3500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_3500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-28",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_4000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_4000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_4000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-29",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_4500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_4500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_4500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-30",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_5000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_5000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_5000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-31",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_5500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_5500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_5500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-32",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_6000` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_6000`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_6000",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-33",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration/Block_6500` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration/Block_6500`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration/Block_6500",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-34",
+      "description": "Test `TestOverrideStateSyncRecordsInRangeIntegration` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRangeIntegration`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRangeIntegration",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-35",
+      "description": "Test `TestBlockRangeOverrideStruct` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestBlockRangeOverrideStruct`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestBlockRangeOverrideStruct",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-36",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Empty_configuration` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Empty_configuration`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Empty_configuration",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-37",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_range_-_block_within_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_range_-_block_within_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_range_-_block_within_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-38",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_start_boundary` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_start_boundary`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_start_boundary",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-39",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_end_boundary` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_end_boundary`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_range_-_block_at_end_boundary",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-40",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_range_-_block_before_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_range_-_block_before_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_range_-_block_before_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-41",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_range_-_block_after_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_range_-_block_after_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_range_-_block_after_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-42",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_first_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_first_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_first_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-43",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_second_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_second_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_second_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-44",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_third_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_third_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_in_third_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-45",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_between_ranges` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_between_ranges`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Multiple_ranges_-_block_between_ranges",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-46",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Overlapping_ranges_-_should_return_first_match` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Overlapping_ranges_-_should_return_first_match`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Overlapping_ranges_-_should_return_first_match",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-47",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Zero_value_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Zero_value_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Zero_value_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-48",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Negative_value_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Negative_value_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Negative_value_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-49",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Single_block_range` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Single_block_range`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Single_block_range",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-50",
+      "description": "Test `TestOverrideStateSyncRecordsInRange/Large_block_numbers` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange/Large_block_numbers`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange/Large_block_numbers",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-51",
+      "description": "Test `TestOverrideStateSyncRecordsInRange` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestOverrideStateSyncRecordsInRange`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestOverrideStateSyncRecordsInRange",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-f2p-52",
+      "description": "Test `TestBorKeyValueConfigHelper` passes",
+      "weight": "major",
+      "rationale": "Core fix verification via `TestBorKeyValueConfigHelper`",
+      "test_id": "github.com/ethereum/go-ethereum/params::TestBorKeyValueConfigHelper",
+      "test_type": "fail_to_pass"
+    },
+    {
+      "id": "correctness-p2p-1",
+      "description": "Test `TestValidatorsBlockProduction` passes",
+      "weight": "minor",
+      "rationale": "Regression prevention via `TestValidatorsBlockProduction`",
+      "test_id": "github.com/ethereum/go-ethereum/tests/bor::TestValidatorsBlockProduction",
+      "test_type": "pass_to_pass"
+    },
+    {
+      "id": "correctness-p2p-2",
+      "description": "Test `TestSprintLengths` passes",
+      "weight": "minor",
+      "rationale": "Regression prevention via `TestSprintLengths`",
+      "test_id": "github.com/ethereum/go-ethereum/tests/bor::TestSprintLengths",
+      "test_type": "pass_to_pass"
+    },
+    {
+      "id": "correctness-p2p-3",
+      "description": "Test `TestProducerDelay` passes",
+      "weight": "minor",
+      "rationale": "Regression prevention via `TestProducerDelay`",
+      "test_id": "github.com/ethereum/go-ethereum/tests/bor::TestProducerDelay",
+      "test_type": "pass_to_pass"
+    }
+  ],
+  "functional": [
+    {
+      "id": "functional-1",
+      "description": "CalculateCoinbase returns zero address when no configuration exists or is empty",
+      "weight": "major",
+      "rationale": "Defines default behavior for missing config",
+      "source": "expected_behavior",
+      "dependent_on": []
+    },
+    {
+      "id": "functional-2",
+      "description": "CalculateCoinbase returns coinbase address based on transition map and queried block height",
+      "weight": "major",
+      "rationale": "Implements height-based address selection",
+      "source": "expected_behavior",
+      "dependent_on": []
+    },
+    {
+      "id": "functional-3",
+      "description": "Transaction fees are credited to the validator address for all blocks before the Rio hardfork activation block",
+      "weight": "major",
+      "rationale": "Implements pre-Rio fee distribution logic",
+      "source": "expected_behavior",
+      "dependent_on": []
+    },
+    {
+      "id": "functional-4",
+      "description": "Transaction fees are redirected to the configured coinbase address for all blocks at or after the Rio hardfork activation block",
+      "weight": "major",
+      "rationale": "Implements post-Rio fee redirection logic",
+      "source": "expected_behavior",
+      "dependent_on": []
+    },
+    {
+      "id": "functional-5",
+      "description": "The coinbase address used for fee distribution is determined by checking Rio hardfork activation status before querying in the coinbase configuration",
+      "weight": "major",
+      "rationale": "Ensures Rio activation check is applied before coinbase looup",
+      "source": "expected_behavior",
+      "dependent_on": []
+    },
+    {
+      "id": "functional-6",
+      "description": "All validators use the same coinbase logic based on block height",
+      "weight": "major",
+      "rationale": "Ensures consistent network behavior",
+      "source": "expected_behavior",
+      "dependent_on": []
+    }
+  ],
+  "robustness": [
+    {
+      "id": "robustness-1",
+      "description": "CalculateCoinbase runs without errors when the config is nil or empty and when multiple transitions are defined.",
+      "weight": "major",
+      "rationale": "Ensures safe operation across transitions",
+      "dependent_on": []
+    }
+  ],
+  "style": [
+    {
+      "id": "style-1",
+      "description": "All Go files pass gofmt without modifications",
+      "weight": "minor",
+      "rationale": "Maintains consistent formatting",
+      "dependent_on": []
+    },
+    {
+      "id": "style-2",
+      "description": "All exported functions start with an uppercase letter",
+      "weight": "minor",
+      "rationale": "Ensures correct capitalization for exported identifiers in Go",
+      "dependent_on": []
+    },
+    {
+      "id": "style-3",
+      "description": "All unexported functions and types start with a lowercase letter",
+      "weight": "minor",
+      "rationale": "Maintains standard Go naming for internal identifiers",
+      "dependent_on": []
+    },
+    {
+      "id": "style-4",
+      "description": "All multi-word identifiers use camelCase without underscores (e.g CalculationCoinbase)",
+      "weight": "minor",
+      "rationale": "Ensures readability and Go naming consistency",
+      "dependent_on": []
+    }
+  ]
+}
