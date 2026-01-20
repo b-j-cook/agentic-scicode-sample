@@ -63,7 +63,12 @@ jobs:
             grep -v '^tasks/README.md' | \
             sed 's|^\(tasks/[^/]*\)/.*|\1|' | \
             sort -u || true)
-          
+
+          # Filter out deleted tasks (directories that no longer exist)
+          TASKS=$(echo "$TASKS" | while read task; do
+            [ -n "$task" ] && [ -d "$task" ] && echo "$task"
+          done)
+
           if [ -z "$TASKS" ]; then
             echo "No task directories changed"
             echo "tasks=" >> $GITHUB_OUTPUT
