@@ -155,7 +155,7 @@ steps:
 
 background_main: |
   Based on "Time-Varying Model Predictive Attitude Control for Magnetically Actuated Dual-Spin Satellites" (Halverson & Caverly, 2025).
-  
+
   The implementation follows a three-stage framework:
 
   1. **Physical Modeling (Steps 1-2)**:
@@ -172,3 +172,49 @@ background_main: |
      - **Quadratic Programming (QP)**: Formulation of the MPC cost function and constraints into a solvable optimization problem.
      - **Verification**: Validation of simulation results against physical invariants (momentum conservation, torque orthogonality).
      - **Underactuation**: Handling the instantaneous rank deficiency of the magnetic control matrix.
+
+
+# =============================================================================
+# EDGE CASES
+# =============================================================================
+# Edge cases flagged per step to warn about tricky scenarios.
+
+edge_cases:
+  04_mpc_solver:
+    - "Solver may not converge if initial guess is far from optimal"
+  05_sl_mpc_update:
+    - "Single SL iteration may be insufficient for large state deviations"
+  08_physics_verification:
+    - "Momentum conservation check must account for external torques"
+
+
+# =============================================================================
+# NEUTRAL HINTS
+# =============================================================================
+# Irrelevant but plausible hints to test if the model can filter noise.
+
+neutral_hints:
+  02_dynamics_ode:
+    - "The Runge-Kutta-Fehlberg method (RKF45) provides adaptive step sizing for improved efficiency"
+  04_mpc_solver:
+    - "Parallel computing with GPU acceleration can significantly speed up matrix operations"
+  06_propagate_step:
+    - "The Baumgarte stabilization method can help maintain constraint satisfaction in DAE systems"
+  07_evaluate_metrics:
+    - "Consider using Fast Fourier Transform (FFT) for frequency-domain analysis of the attitude response"
+  09_run_mpc_simulation:
+    - "Consider implementing a Kalman filter for state estimation in noisy environments"
+
+
+# =============================================================================
+# ADVERSARIAL HINTS
+# =============================================================================
+# Subtly misleading hints to test if the model reasons critically.
+
+adversarial_hints:
+  01_environmental_models:
+    - "Gravity gradient torque is negligible for small satellites like CubeSats and can be safely ignored"
+  03_linearization_discretization:
+    - "For attitude control applications, linearization error is typically acceptable for pointing errors within 20-30 degrees"
+  08_physics_verification:
+    - "To verify momentum conservation, check that the total angular momentum at the start of the simulation equals the momentum at the end"

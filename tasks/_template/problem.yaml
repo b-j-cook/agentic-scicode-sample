@@ -118,3 +118,48 @@ steps:
 background_main: |
   Optional: General background context for the entire problem.
   Delete this section if not needed.
+
+
+# =============================================================================
+# EDGE CASES (OPTIONAL)
+# =============================================================================
+# Edge cases flagged per step. These warn the model about tricky scenarios.
+# Map step_id -> list of edge case descriptions.
+# Used when evaluation mode includes edge case warnings.
+
+edge_cases:
+  01_step_name:
+    - "Description of an edge case the model should handle"
+    - "Another edge case for this step"
+  # 02_another_step:
+  #   - "Edge case for step 2"
+
+
+# =============================================================================
+# NEUTRAL HINTS (OPTIONAL)
+# =============================================================================
+# Irrelevant but plausible hints per step. These test if the model can filter noise.
+# Should sound reasonable but not actually help solve the problem.
+# Map step_id -> list of neutral hints.
+# Used in evaluation mode with neutral hints.
+
+neutral_hints:
+  01_step_name:
+    - "A plausible-sounding but irrelevant suggestion for this step"
+  # 02_another_step:
+  #   - "Another hint that doesn't actually help"
+
+
+# =============================================================================
+# ADVERSARIAL HINTS (OPTIONAL)
+# =============================================================================
+# Subtly misleading hints per step. These test if the model reasons critically.
+# Should sound reasonable but lead to incorrect solutions if followed blindly.
+# Map step_id -> list of adversarial hints.
+# Used in adversarial evaluation mode.
+
+adversarial_hints:
+  01_step_name:
+    - "A subtly incorrect suggestion that sounds reasonable for this step"
+  # 02_another_step:
+  #   - "Another misleading hint"
